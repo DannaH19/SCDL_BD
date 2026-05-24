@@ -1,24 +1,51 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
-import { AuthRequest } from '../shared/types/auth-request';
 
-export const authMiddleware = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  const header = req.headers.authorization;
-  if (!header || !header.startsWith('Bearer ')) {
-    res.status(401).json({ message: 'Token no proporcionado.' });
-    return;
+interface JwtPayload {
+  id: number;
+  username: string;
+  rol: number;
+}
+
+// Extender Request para incluir el usuario
+declare global {
+  namespace Express {
+    interface Request {
+      usuario?: JwtPayload;
+    }
   }
-  const token = header.split(' ')[1];
+}
+
+// Verificar token
+export const verificarToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token no proporcionado' });
+  }
+
   try {
-    const payload = jwt.verify(token, ENV.JWT_SECRET) as AuthRequest['user'];
-    req.user = payload;
+    const decoded = jwt.verify(token, ENV.JWT_SECRET as string) as JwtPayload;
+    req.usuario = decoded;
     next();
-  } catch {
-    res.status(401).json({ message: 'Token inválido o expirado.' });
+  } catch (error) {
+    return res.status(403).json({ message: 'Token inválido o expirado' });
   }
+};
+
+// Verificar rol
+export const verificarRol = (...rolesPermitidos: number[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.usuario) {
+      return res.status(401).json({ message: 'No autenticado' });
+    }
+
+    if (!rolesPermitidos.includes(req.usuario.rol)) {
+      return res.status(403).json({ message: 'No tienes permisos para esta acción' });
+    }
+
+    next();
+  };
 };

@@ -7,11 +7,11 @@ export class AtencionController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try { res.json(await service.getAll()); } catch (e) { next(e); }
   }
-  async getByTurno(req: Request, res: Response, next: NextFunction) {
-    try { res.json(await service.getByTurno(+req.params.turnoId)); } catch (e) { next(e); }
-  }
   async getById(req: Request, res: Response, next: NextFunction) {
     try { res.json(await service.getById(+req.params.id)); } catch (e) { next(e); }
+  }
+  async getByCita(req: Request, res: Response, next: NextFunction) {
+    try { res.json(await service.getByCita(+req.params.citaId)); } catch (e) { next(e); }
   }
   async create(req: Request, res: Response, next: NextFunction) {
     try { res.status(201).json(await service.create(req.body)); } catch (e) { next(e); }

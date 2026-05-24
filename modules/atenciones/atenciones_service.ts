@@ -4,18 +4,28 @@ import { CreateAtencionDto, UpdateAtencionDto } from './atenciones_schema';
 const repo = new AtencionRepository();
 
 export class AtencionService {
-  getAll()                  { return repo.findAll(); }
-  getByTurno(id: number)    { return repo.findByTurno(id); }
+  getAll() {
+    return repo.findAll();
+  }
+
   async getById(id: number) {
     const a = await repo.findById(id);
     if (!a) throw new Error(`Atención con id ${id} no encontrada.`);
     return a;
   }
+
+  async getByCita(id: number) {
+    const a = await repo.findByCita(id);
+    if (!a) throw new Error(`Atención para la cita ${id} no encontrada.`);
+    return a;
+  }
+
   async create(data: CreateAtencionDto) {
-    const existe = await repo.findByTurno(data.id_turno);
-    if (existe) throw new Error('Ya existe una atención para este turno.');
+    const existe = await repo.findByCita(data.ID_cita);
+    if (existe) throw new Error('Ya existe una atención para esta cita.');
     return repo.create(data);
   }
+
   async update(id: number, data: UpdateAtencionDto) {
     await this.getById(id);
     await repo.update(id, data);

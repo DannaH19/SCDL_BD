@@ -2,41 +2,71 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../../config/database';
 
 export interface AtencionAttributes {
-  id_atencion: number;
-  id_turno: number;
-  peso_kg?: number;
-  talla_cm?: number;
-  presion_arterial?: string;
-  temperatura_c?: number;
-  frecuencia_cardiaca?: number;
-  saturacion_oxigeno?: number;
+  ID_atencion: number;
+  fecha_aten?: Date;
+  diagnostico?: string;
+  tratamiento?: string;
+  formula_direc?: string;
   observaciones?: string;
-  fecha_atencion: Date;
+  incapacidad?: boolean;
+  estado_a?: boolean;
+  ID_cita: number;
 }
-type AtencionCreation = Optional<AtencionAttributes, 'id_atencion'>;
+
+type AtencionCreation = Optional<AtencionAttributes, 'ID_atencion'>;
 
 export class Atencion extends Model<AtencionAttributes, AtencionCreation> implements AtencionAttributes {
-  public id_atencion!: number;
-  public id_turno!: number;
-  public peso_kg?: number;
-  public talla_cm?: number;
-  public presion_arterial?: string;
-  public temperatura_c?: number;
-  public frecuencia_cardiaca?: number;
-  public saturacion_oxigeno?: number;
+  public ID_atencion!: number;
+  public fecha_aten?: Date;
+  public diagnostico?: string;
+  public tratamiento?: string;
+  public formula_direc?: string;
   public observaciones?: string;
-  public fecha_atencion!: Date;
+  public incapacidad?: boolean;
+  public estado_a?: boolean;
+  public ID_cita!: number;
 }
 
-Atencion.init({
-  id_atencion:          { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  id_turno:             { type: DataTypes.INTEGER, allowNull: false, unique: true },
-  peso_kg:              { type: DataTypes.DECIMAL(5,2) },
-  talla_cm:             { type: DataTypes.DECIMAL(5,1) },
-  presion_arterial:     { type: DataTypes.STRING(10) },
-  temperatura_c:        { type: DataTypes.DECIMAL(4,1) },
-  frecuencia_cardiaca:  { type: DataTypes.INTEGER },
-  saturacion_oxigeno:   { type: DataTypes.DECIMAL(4,1) },
-  observaciones:        { type: DataTypes.TEXT },
-  fecha_atencion:       { type: DataTypes.DATE, allowNull: false },
-}, { sequelize, tableName: 'atenciones', modelName: 'Atencion' });
+Atencion.init(
+  {
+    ID_atencion: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    fecha_aten: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    diagnostico: {
+      type: DataTypes.TEXT,
+    },
+    tratamiento: {
+      type: DataTypes.TEXT,
+    },
+    formula_direc: {
+      type: DataTypes.TEXT,
+    },
+    observaciones: {
+      type: DataTypes.TEXT,
+    },
+    incapacidad: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    estado_a: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    ID_cita: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    tableName: 'Atencion',
+    modelName: 'Atencion',
+    timestamps: false,
+  }
+);

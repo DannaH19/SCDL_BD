@@ -5,7 +5,7 @@ export const ENV = {
   PORT:           process.env.PORT         || '3000',
   DB_HOST:        process.env.DB_HOST      || 'localhost',
   DB_PORT:        Number(process.env.DB_PORT) || 3306,
-  DB_NAME:        process.env.DB_NAME      || 'turnos_medicos',
+  DB_NAME:        process.env.DB_NAME      || 'SCDL_DB',  // ← cambia esto
   DB_USER:        process.env.DB_USER      || 'root',
   DB_PASS:        process.env.DB_PASS      || '',
   JWT_SECRET:     process.env.JWT_SECRET   || 'secret',

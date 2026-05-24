@@ -1,15 +1,14 @@
 import { z } from 'zod';
 
 export const createAtencionSchema = z.object({
-  id_turno:            z.number().int().positive(),
-  peso_kg:             z.number().positive().optional(),
-  talla_cm:            z.number().positive().optional(),
-  presion_arterial:    z.string().max(10).optional(),
-  temperatura_c:       z.number().optional(),
-  frecuencia_cardiaca: z.number().int().positive().optional(),
-  saturacion_oxigeno:  z.number().min(0).max(100).optional(),
-  observaciones:       z.string().optional(),
-  fecha_atencion:      z.string().datetime(),
+  ID_cita:       z.number().int().positive(),
+  fecha_aten:    z.string().datetime().optional(),
+  diagnostico:   z.string().optional(),
+  tratamiento:   z.string().optional(),
+  formula_direc: z.string().optional(),
+  observaciones: z.string().optional(),
+  incapacidad:   z.boolean().optional(),
+  estado_a:      z.boolean().optional(),
 });
 
 export const updateAtencionSchema = createAtencionSchema.partial();
