@@ -13,19 +13,20 @@ import { CitasComponent }      from '../citas/citas.component';
 import { SedesComponent }      from '../sedes/sedes.component';
 import { UsuariosComponent }   from '../usuarios/usuarios.component';
 import { EpsComponent }        from '../eps/eps.component';
+import { adminGuard, superadminGuard } from '../../core/guards/rol.guards';
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
     children: [
-      { path: '',          component: HomeComponent },
-      { path: 'pacientes', component: PacientesComponent },
-      { path: 'medicos',   component: MedicosComponent },
-      { path: 'citas',     component: CitasComponent },
-      { path: 'sedes',     component: SedesComponent },
-      { path: 'usuarios',  component: UsuariosComponent },
-      { path: 'eps',       component: EpsComponent },
+      { path: '',           component: HomeComponent },
+      { path: 'pacientes',  component: PacientesComponent },
+      { path: 'citas',      component: CitasComponent },
+      { path: 'medicos',    component: MedicosComponent,   canActivate: [adminGuard] },
+      { path: 'sedes',      component: SedesComponent,     canActivate: [adminGuard] },
+      { path: 'eps',        component: EpsComponent,       canActivate: [adminGuard] },
+      { path: 'usuarios',   component: UsuariosComponent,  canActivate: [superadminGuard] },
     ],
   },
 ];

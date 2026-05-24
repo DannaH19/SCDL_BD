@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({ selector: 'app-pacientes', templateUrl: './pacientes.component.html', standalone: false })
 export class PacientesComponent implements OnInit {
@@ -9,7 +10,7 @@ export class PacientesComponent implements OnInit {
   editando: any = null;
   form: any = this.formVacio();
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, public auth: AuthService) {}
   ngOnInit() { this.cargar(); }
 
   cargar() {

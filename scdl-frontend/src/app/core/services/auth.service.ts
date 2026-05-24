@@ -31,12 +31,22 @@ export class AuthService {
     try {
       const u = localStorage.getItem('user');
       return u ? JSON.parse(u) : null;
-    } catch {
-      return null;
-    }
+    } catch { return null; }
   }
 
   getRole(): number { return this.getUser()?.rol || 0; }
-  isSuperadmin()    { return this.getRole() === 1; }
-  isAdmin()         { return this.getRole() <= 2; }
+
+  isSuperadmin()   { return this.getRole() === 1; }
+  isAdministrador(){ return this.getRole() === 2; }
+  isUsuario()      { return this.getRole() === 3; }
+  isConsultor()    { return this.getRole() === 4; }
+
+  isAdmin()        { return this.getRole() <= 2; }
+  canEdit()        { return this.getRole() <= 3; }
+  canView()        { return this.getRole() >= 1; }
+
+  getRolNombre(): string {
+    const roles: any = { 1:'Superadmin', 2:'Administrador', 3:'Usuario', 4:'Consultor' };
+    return roles[this.getRole()] || 'Sin rol';
+  }
 }

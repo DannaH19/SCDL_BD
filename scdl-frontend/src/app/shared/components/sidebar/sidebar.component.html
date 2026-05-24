@@ -1,12 +1,19 @@
 <aside class="sidebar">
   <div class="sidebar-brand">🏥 SCDL</div>
   <nav class="sidebar-nav">
-    <a routerLink="/dashboard"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">🏠 Inicio</a>
-    <a routerLink="/dashboard/pacientes" routerLinkActive="active">👥 Pacientes</a>
-    <a routerLink="/dashboard/medicos"   routerLinkActive="active">🩺 Médicos</a>
-    <a routerLink="/dashboard/citas"     routerLinkActive="active">📅 Citas</a>
-    <a routerLink="/dashboard/sedes"     routerLinkActive="active">🏥 Sedes</a>
-    <a routerLink="/dashboard/eps"       routerLinkActive="active">🏢 EPS</a>
-    <a routerLink="/dashboard/usuarios"  routerLinkActive="active" *ngIf="auth.isAdmin()">👤 Usuarios</a>
+    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">🏠 Inicio</a>
+
+    <!-- Usuario y superiores -->
+    <a routerLink="/dashboard/pacientes" routerLinkActive="active" *ngIf="auth.canView()">👥 Pacientes</a>
+    <a routerLink="/dashboard/citas"     routerLinkActive="active" *ngIf="auth.canView()">📅 Citas</a>
+
+    <!-- Administrador y superiores -->
+    <a routerLink="/dashboard/medicos"   routerLinkActive="active" *ngIf="auth.isAdmin()">🩺 Médicos</a>
+    <a routerLink="/dashboard/sedes"     routerLinkActive="active" *ngIf="auth.isAdmin()">🏥 Sedes</a>
+    <a routerLink="/dashboard/eps"       routerLinkActive="active" *ngIf="auth.isAdmin()">🏢 EPS</a>
+
+    <!-- Solo Superadmin -->
+    <a routerLink="/dashboard/usuarios"  routerLinkActive="active" *ngIf="auth.isSuperadmin()">👤 Usuarios</a>
+    <a routerLink="/dashboard/auditoria" routerLinkActive="active" *ngIf="auth.isSuperadmin()">📋 Auditoría</a>
   </nav>
 </aside>

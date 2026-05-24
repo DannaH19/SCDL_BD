@@ -6,13 +6,34 @@
 
   <div *ngIf="mostrarForm" class="card" style="background:#f9f9f9">
     <h3>{{ editando ? 'Editar' : 'Nueva' }} Sede</h3>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
-      <div class="form-group"><label>Nombre</label><input [(ngModel)]="form.Nom_sede" /></div>
-      <div class="form-group"><label>Direccion</label><input [(ngModel)]="form.Direc_s" /></div>
-      <div class="form-group"><label>Telefono</label><input [(ngModel)]="form.Telefono_s" /></div>
-      <div class="form-group"><label>Correo</label><input [(ngModel)]="form.Correo_s" type="email" /></div>
-      <div class="form-group"><label>ID Ciudad</label><input [(ngModel)]="form.ID_ciudad" type="number" /></div>
+      <div class="form-group">
+        <label>Nombre</label>
+        <input [(ngModel)]="form.Nom_sede" />
+      </div>
+
+      <div class="form-group">
+        <label>Direccion</label>
+        <input [(ngModel)]="form.Direc_s" />
+      </div>
+
+      <div class="form-group">
+        <label>Telefono</label>
+        <input [(ngModel)]="form.Telefono_s" />
+      </div>
+
+      <div class="form-group">
+        <label>Correo</label>
+        <input [(ngModel)]="form.Correo_s" type="email" />
+      </div>
+
+      <div class="form-group">
+        <label>ID Ciudad</label>
+        <input [(ngModel)]="form.ID_ciudad" type="number" />
+      </div>
     </div>
+
     <div style="margin-top:16px;display:flex;gap:8px">
       <button class="btn btn-success" (click)="guardar()">Guardar</button>
       <button class="btn btn-secondary" (click)="mostrarForm=false">Cancelar</button>
@@ -20,17 +41,40 @@
   </div>
 
   <div *ngIf="loading">Cargando...</div>
+
   <table *ngIf="!loading">
-    <thead><tr><th>ID</th><th>Nombre</th><th>Direccion</th><th>Telefono</th><th>Acciones</th></tr></thead>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
     <tbody>
       <tr *ngFor="let s of sedes">
         <td>{{ s.ID_sede }}</td>
         <td>{{ s.Nom_sede }}</td>
         <td>{{ s.Direc_s }}</td>
         <td>{{ s.Telefono_s }}</td>
+
         <td>
-          <button class="btn btn-warning btn-sm" (click)="editar(s)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminar(s.ID_sede)" style="margin-left:6px">Eliminar</button>
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="editar(s)"
+            *ngIf="auth.canEdit()">
+            Editar
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminar(s.ID_sede)"
+            style="margin-left:6px"
+            *ngIf="auth.isAdmin()">
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>

@@ -6,16 +6,49 @@
 
   <div *ngIf="mostrarForm" class="card" style="background:#f9f9f9">
     <h3>{{ editando ? 'Editar' : 'Nuevo' }} Medico</h3>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
-      <div class="form-group"><label>Documento</label><input [(ngModel)]="form.num_doc_m" /></div>
-      <div class="form-group"><label>Nombre</label><input [(ngModel)]="form.nom_m" /></div>
-      <div class="form-group"><label>Apellido</label><input [(ngModel)]="form.ape_m" /></div>
-      <div class="form-group"><label>Num licencia</label><input [(ngModel)]="form.num_lic" /></div>
-      <div class="form-group"><label>Telefono</label><input [(ngModel)]="form.telefono_m" /></div>
-      <div class="form-group"><label>Correo</label><input [(ngModel)]="form.correo_m" type="email" /></div>
-      <div class="form-group"><label>Direccion</label><input [(ngModel)]="form.direc_m" /></div>
-      <div class="form-group"><label>ID Especialidad</label><input [(ngModel)]="form.ID_especialidad" type="number" /></div>
+      <div class="form-group">
+        <label>Documento</label>
+        <input [(ngModel)]="form.num_doc_m" />
+      </div>
+
+      <div class="form-group">
+        <label>Nombre</label>
+        <input [(ngModel)]="form.nom_m" />
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input [(ngModel)]="form.ape_m" />
+      </div>
+
+      <div class="form-group">
+        <label>Num licencia</label>
+        <input [(ngModel)]="form.num_lic" />
+      </div>
+
+      <div class="form-group">
+        <label>Telefono</label>
+        <input [(ngModel)]="form.telefono_m" />
+      </div>
+
+      <div class="form-group">
+        <label>Correo</label>
+        <input [(ngModel)]="form.correo_m" type="email" />
+      </div>
+
+      <div class="form-group">
+        <label>Direccion</label>
+        <input [(ngModel)]="form.direc_m" />
+      </div>
+
+      <div class="form-group">
+        <label>ID Especialidad</label>
+        <input [(ngModel)]="form.ID_especialidad" type="number" />
+      </div>
     </div>
+
     <div style="margin-top:16px;display:flex;gap:8px">
       <button class="btn btn-success" (click)="guardar()">Guardar</button>
       <button class="btn btn-secondary" (click)="mostrarForm=false">Cancelar</button>
@@ -23,8 +56,19 @@
   </div>
 
   <div *ngIf="loading">Cargando...</div>
+
   <table *ngIf="!loading">
-    <thead><tr><th>ID</th><th>Documento</th><th>Nombre</th><th>Apellido</th><th>Licencia</th><th>Acciones</th></tr></thead>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Documento</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Licencia</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
     <tbody>
       <tr *ngFor="let m of medicos">
         <td>{{ m.ID_medico }}</td>
@@ -32,9 +76,22 @@
         <td>{{ m.nom_m }}</td>
         <td>{{ m.ape_m }}</td>
         <td>{{ m.num_lic }}</td>
+
         <td>
-          <button class="btn btn-warning btn-sm" (click)="editar(m)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminar(m.ID_medico)" style="margin-left:6px">Eliminar</button>
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="editar(m)"
+            *ngIf="auth.canEdit()">
+            Editar
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminar(m.ID_medico)"
+            style="margin-left:6px"
+            *ngIf="auth.isAdmin()">
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>

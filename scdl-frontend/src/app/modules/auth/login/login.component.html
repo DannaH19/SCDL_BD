@@ -51,10 +51,10 @@
       <div class="form-group">
         <label>Rol</label>
         <select [(ngModel)]="regForm.ID_rol">
-          <option [value]="1">Superadmin</option>
-          <option [value]="2">Administrador</option>
-          <option [value]="3">Usuario</option>
-          <option [value]="4">Consultas</option>
+          <option [ngValue]="1">Superadmin</option>
+          <option [ngValue]="2">Administrador</option>
+          <option [ngValue]="3">Usuario</option>
+          <option [ngValue]="4">Consultas</option>
         </select>
       </div>
       <div *ngIf="errorReg" class="alert alert-danger">{{ errorReg }}</div>
