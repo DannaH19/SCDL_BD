@@ -5,8 +5,14 @@ const service = new MedicoService();
 
 export class MedicoController {
   async getAll(req: Request, res: Response, next: NextFunction) {
-    try { res.json(await service.getAll()); } catch (e) { next(e); }
+  try {
+    const data = await service.getAll();
+    res.json(data);
+  } catch (e: any) {
+    console.error('ERROR MEDICOS:', e.message);
+    next(e);
   }
+}
   async getByEspecialidad(req: Request, res: Response, next: NextFunction) {
     try { res.json(await service.getByEspecialidad(+req.params.espId)); } catch (e) { next(e); }
   }

@@ -1,14 +1,13 @@
 import { z } from 'zod';
 
 export const createHorarioSchema = z.object({
-  id_medico:         z.number().int().positive(),
-  id_sede:           z.number().int().positive(),
-  id_consultorio:    z.number().int().positive().optional(),
-  dia_semana:        z.number().int().min(0).max(6),
-  hora_inicio:       z.string().regex(/^\d{2}:\d{2}$/, 'Formato HH:MM'),
-  hora_fin:          z.string().regex(/^\d{2}:\d{2}$/, 'Formato HH:MM'),
-  duracion_cita_min: z.number().int().min(5).max(120).default(20),
-  cupo_maximo:       z.number().int().min(1),
+  dia_semana:    z.enum(['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']),
+  hora_inicio:   z.string().regex(/^\d{2}:\d{2}$/),
+  hora_fin:      z.string().regex(/^\d{2}:\d{2}$/),
+  fecha_i_vigen: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  fecha_f_vigen: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  ID_medico:     z.number().int().positive().optional(),
+  ID_consultorio:z.number().int().positive().optional(),
 });
 
 export const updateHorarioSchema = createHorarioSchema.partial();

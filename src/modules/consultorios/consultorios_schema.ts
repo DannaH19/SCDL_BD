@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 export const createConsultorioSchema = z.object({
-  id_sede:            z.number().int().positive(),
-  numero_consultorio: z.string().min(1).max(10),
-  piso:               z.number().int().optional(),
-  descripcion:        z.string().max(100).optional(),
+  Num_con:  z.string().max(10).optional(),
+  Piso:     z.number().int().optional(),
+  Bloque:   z.string().max(15).optional(),
+  ID_sede:  z.number().int().positive().optional(),
 });
 
 export const updateConsultorioSchema = createConsultorioSchema.partial();

@@ -1,9 +1,9 @@
-import { Paciente, PacienteAttributes } from '../pacientes/pacientes_model';
-import { CreatePacienteDto, UpdatePacienteDto } from '../pacientes/pacientes_schema';
+import { Paciente, PacienteAttributes } from './pacientes_model';
+import { CreatePacienteDto, UpdatePacienteDto } from './pacientes_schema';
 
 export class PacienteRepository {
   findAll() {
-    return Paciente.findAll({ where: { activo: true } });
+    return Paciente.findAll({ where: { estado_p: true } });
   }
 
   findById(id: number) {
@@ -11,24 +11,20 @@ export class PacienteRepository {
   }
 
   findByDocumento(numero: string) {
-    return Paciente.findOne({ where: { numero_documento: numero } });
+    return Paciente.findOne({ where: { num_doc_p: numero } });
   }
 
   create(data: CreatePacienteDto) {
-    return Paciente.create({
-        ...data,
-        fecha_nacimiento: new Date(data.fecha_nacimiento), 
-    } as any); 
+    return Paciente.create(data as PacienteAttributes);
   }
+
   async update(id: number, data: UpdatePacienteDto) {
-  const [affected] = await Paciente.update(data as any, { 
-    where: { id_paciente: id } 
-  });
-  return affected;
+    const [affected] = await Paciente.update(data, { where: { ID_Paciente: id } });
+    return affected;
   }
 
   async softDelete(id: number) {
-    const [affected] = await Paciente.update({ activo: false }, { where: { id_paciente: id } });
+    const [affected] = await Paciente.update({ estado_p: false }, { where: { ID_Paciente: id } });
     return affected;
   }
 }

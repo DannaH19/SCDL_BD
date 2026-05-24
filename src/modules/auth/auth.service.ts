@@ -39,4 +39,21 @@ export class AuthService {
       },
     };
   }
+
+  async register(data: any) {
+    const existe = await repo.findByUsername(data.username);
+    if (existe) throw new Error(`El usuario '${data.username}' ya existe.`);
+
+    const hash = sha256(data.password);
+
+    return repo.create({
+      username:   data.username,
+      contraseña: hash,
+      Nom_comp:   data.Nom_comp,
+      correo_u:   data.correo_u   || null,
+      telefono_u: data.telefono_u || null,
+      ID_rol:     data.ID_rol     || 3,
+      estado_u:   true,
+    });
+  }
 }

@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
 export const createMedicoSchema = z.object({
-  id_tipo_doc:       z.number().int().positive(),
-  numero_documento:  z.string().min(5).max(20),
-  registro_medico:   z.string().min(3).max(20),
-  primer_nombre:     z.string().min(2).max(40),
-  segundo_nombre:    z.string().max(40).optional(),
-  primer_apellido:   z.string().min(2).max(40),
-  segundo_apellido:  z.string().max(40).optional(),
-  id_especialidad:   z.number().int().positive(),
-  id_sede_principal: z.number().int().positive(),
-  telefono:          z.string().max(15).optional(),
-  correo:            z.string().email().optional(),
+  num_doc_m:       z.string().min(3).max(20),
+  nom_m:           z.string().min(2).max(20),
+  ape_m:           z.string().min(2).max(35),
+  num_lic:         z.string().max(20).optional(),
+  telefono_m:      z.string().max(10).optional(),
+  correo_m:        z.string().email().max(50).optional(),
+  direc_m:         z.string().max(100).optional(),
+  ID_tipo_doc:     z.number().int().positive().optional(),
+  ID_genero:       z.number().int().positive().optional(),
+  ID_especialidad: z.number().int().positive().optional(),
+  ID_ciudad:       z.number().int().positive().optional(),
 });
 
 export const updateMedicoSchema = createMedicoSchema.partial();

@@ -2,53 +2,45 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../../config/database';
 
 export interface CitaAttributes {
-  id_cita: number;
-  id_paciente: number;
-  id_medico: number;
-  id_sede: number;
-  id_consultorio?: number;
-  id_tipo_consulta: number;
-  id_horario: number;
-  fecha_cita: string;
-  hora_cita: string;
-  estado: string;
-  motivo_consulta?: string;
-  numero_autorizacion?: string;
-  canal_agendamiento: string;
-  creado_por: number;
+  ID_cita:            number;
+  fecha_c:            string;
+  hora_c:             string;
+  estado_c?:          string;
+  Motivo_consulta?:   string;
+  fecha_agendamiento?: Date;
+  observaciones?:     string;
+  ID_medico?:         number;
+  ID_paciente?:       number;
+  ID_horario?:        number;
+  ID_usuario?:        number;
 }
-type CitaCreation = Optional<CitaAttributes, 'id_cita' | 'estado' | 'canal_agendamiento'>;
+
+type CitaCreation = Optional<CitaAttributes, 'ID_cita'>;
 
 export class Cita extends Model<CitaAttributes, CitaCreation> implements CitaAttributes {
-  public id_cita!: number;
-  public id_paciente!: number;
-  public id_medico!: number;
-  public id_sede!: number;
-  public id_consultorio?: number;
-  public id_tipo_consulta!: number;
-  public id_horario!: number;
-  public fecha_cita!: string;
-  public hora_cita!: string;
-  public estado!: string;
-  public motivo_consulta?: string;
-  public numero_autorizacion?: string;
-  public canal_agendamiento!: string;
-  public creado_por!: number;
+  public ID_cita!:            number;
+  public fecha_c!:            string;
+  public hora_c!:             string;
+  public estado_c?:           string;
+  public Motivo_consulta?:    string;
+  public fecha_agendamiento?: Date;
+  public observaciones?:      string;
+  public ID_medico?:          number;
+  public ID_paciente?:        number;
+  public ID_horario?:         number;
+  public ID_usuario?:         number;
 }
 
 Cita.init({
-  id_cita:              { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  id_paciente:          { type: DataTypes.INTEGER, allowNull: false },
-  id_medico:            { type: DataTypes.INTEGER, allowNull: false },
-  id_sede:              { type: DataTypes.INTEGER, allowNull: false },
-  id_consultorio:       { type: DataTypes.INTEGER },
-  id_tipo_consulta:     { type: DataTypes.INTEGER, allowNull: false },
-  id_horario:           { type: DataTypes.INTEGER, allowNull: false },
-  fecha_cita:           { type: DataTypes.DATEONLY, allowNull: false },
-  hora_cita:            { type: DataTypes.TIME, allowNull: false },
-  estado:               { type: DataTypes.STRING(20), defaultValue: 'Pendiente' },
-  motivo_consulta:      { type: DataTypes.TEXT },
-  numero_autorizacion:  { type: DataTypes.STRING(30) },
-  canal_agendamiento:   { type: DataTypes.STRING(20), defaultValue: 'Presencial' },
-  creado_por:           { type: DataTypes.INTEGER, allowNull: false },
-}, { sequelize, tableName: 'citas', modelName: 'Cita' });
+  ID_cita:            { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  fecha_c:            { type: DataTypes.DATEONLY, allowNull: false },
+  hora_c:             { type: DataTypes.TIME, allowNull: false },
+  estado_c:           { type: DataTypes.ENUM('Agendada','Confirmada','Cancelada','Atendida','Inasistencia'), defaultValue: 'Agendada' },
+  Motivo_consulta:    { type: DataTypes.STRING(150) },
+  fecha_agendamiento: { type: DataTypes.DATE },
+  observaciones:      { type: DataTypes.TEXT },
+  ID_medico:          { type: DataTypes.INTEGER },
+  ID_paciente:        { type: DataTypes.INTEGER },
+  ID_horario:         { type: DataTypes.INTEGER },
+  ID_usuario:         { type: DataTypes.INTEGER },
+}, { sequelize, tableName: 'cita_medica', modelName: 'Cita', timestamps: false });

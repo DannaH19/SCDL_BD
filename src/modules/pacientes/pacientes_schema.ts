@@ -1,19 +1,17 @@
 import { z } from 'zod';
 
 export const createPacienteSchema = z.object({
-  id_tipo_doc:      z.number().int().positive(),
-  numero_documento: z.string().min(5).max(20),
-  primer_nombre:    z.string().min(2).max(40),
-  segundo_nombre:   z.string().max(40).optional(),
-  primer_apellido:  z.string().min(2).max(40),
-  segundo_apellido: z.string().max(40).optional(),
-  fecha_nacimiento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato: YYYY-MM-DD'),
-  genero:           z.enum(['M', 'F', 'O']),
-  telefono:         z.string().max(15).optional(),
-  correo:           z.string().email().max(80).optional(),
-  direccion:        z.string().max(120).optional(),
-  id_ciudad:        z.number().int().positive().optional(),
-  id_eps:           z.number().int().positive(),
+  num_doc_p:    z.string().min(3).max(20),
+  nom_p:        z.string().min(2).max(20),
+  ape_p:        z.string().min(2).max(35),
+  fecha_nac_p:  z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  telefono_p:   z.string().max(10).optional(),
+  correo_p:     z.string().email().max(50).optional(),
+  direc_p:      z.string().max(100).optional(),
+  ID_tipo_doc:  z.number().int().positive().optional(),
+  ID_genero:    z.number().int().positive().optional(),
+  ID_eps:       z.number().int().positive().optional(),
+  ID_ciudad:    z.number().int().positive().optional(),
 });
 
 export const updatePacienteSchema = createPacienteSchema.partial();

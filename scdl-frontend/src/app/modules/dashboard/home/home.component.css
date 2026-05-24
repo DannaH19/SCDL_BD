@@ -1,0 +1,9 @@
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.stat-card { border-radius: 12px; padding: 24px; display: flex; align-items: center; gap: 16px; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.blue   { background: linear-gradient(135deg,#1976d2,#42a5f5); }
+.green  { background: linear-gradient(135deg,#388e3c,#66bb6a); }
+.orange { background: linear-gradient(135deg,#f57c00,#ffa726); }
+.purple { background: linear-gradient(135deg,#7b1fa2,#ba68c8); }
+.stat-icon   { font-size: 40px; }
+.stat-number { font-size: 36px; font-weight: 700; display: block; }
+.stat-label  { font-size: 14px; opacity: .85; }

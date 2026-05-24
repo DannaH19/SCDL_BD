@@ -1,0 +1,70 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-logo">
+      <span>🏥</span>
+      <h1>SCDL</h1>
+      <p>Sistema de Gestión de Turnos Médicos</p>
+    </div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Usuario</label>
+        <input formControlName="username" type="text" placeholder="Ingresa tu usuario" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input formControlName="password" type="password" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary btn-block" [disabled]="loading">
+        {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+
+    <!-- ↓ REGISTRO VA AQUÍ ↓ -->
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:#888">
+      ¿No tienes cuenta?
+      <a href="#" (click)="mostrarRegistro=true;$event.preventDefault()" style="color:#1976d2">Regístrate</a>
+    </p>
+
+    <div *ngIf="mostrarRegistro" style="margin-top:24px;border-top:1px solid #eee;padding-top:24px">
+      <h3 style="margin-bottom:16px;color:#1976d2">Crear cuenta</h3>
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input [(ngModel)]="regForm.Nom_comp" type="text" placeholder="Tu nombre completo" />
+      </div>
+      <div class="form-group">
+        <label>Usuario</label>
+        <input [(ngModel)]="regForm.username" type="text" placeholder="Nombre de usuario" />
+      </div>
+      <div class="form-group">
+        <label>Correo</label>
+        <input [(ngModel)]="regForm.correo_u" type="email" placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input [(ngModel)]="regForm.telefono_u" type="text" placeholder="3001234567" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input [(ngModel)]="regForm.password" type="password" placeholder="Mínimo 6 caracteres" />
+      </div>
+      <div class="form-group">
+        <label>Rol</label>
+        <select [(ngModel)]="regForm.ID_rol">
+          <option [value]="1">Superadmin</option>
+          <option [value]="2">Administrador</option>
+          <option [value]="3">Usuario</option>
+          <option [value]="4">Consultas</option>
+        </select>
+      </div>
+      <div *ngIf="errorReg" class="alert alert-danger">{{ errorReg }}</div>
+      <div *ngIf="exitoReg" class="alert alert-success">{{ exitoReg }}</div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-success btn-block" (click)="registrar()">Crear cuenta</button>
+        <button class="btn btn-secondary" (click)="mostrarRegistro=false">Cancelar</button>
+      </div>
+    </div>
+    <!-- ↑ FIN REGISTRO ↑ -->
+
+  </div>
+</div>

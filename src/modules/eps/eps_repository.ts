@@ -3,7 +3,7 @@ import { CreateEpsDto, UpdateEpsDto } from './eps_schema';
 
 export class EpsRepository {
   findAll() {
-    return Eps.findAll({ where: { activa: true } });
+    return Eps.findAll({ where: { estado_eps: true } });
   }
 
   findById(id: number) {
@@ -11,7 +11,7 @@ export class EpsRepository {
   }
 
   findByNit(nit: string) {
-    return Eps.findOne({ where: { nit } });
+    return Eps.findOne({ where: { NIT: nit } });
   }
 
   create(data: CreateEpsDto) {
@@ -19,12 +19,12 @@ export class EpsRepository {
   }
 
   async update(id: number, data: UpdateEpsDto) {
-    const [affected] = await Eps.update(data, { where: { id_eps: id } });
+    const [affected] = await Eps.update(data, { where: { ID_eps: id } });
     return affected;
   }
 
   async softDelete(id: number) {
-    const [affected] = await Eps.update({ activa: false }, { where: { id_eps: id } });
+    const [affected] = await Eps.update({ estado_eps: false }, { where: { ID_eps: id } });
     return affected;
   }
 }

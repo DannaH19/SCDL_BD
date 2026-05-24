@@ -1,0 +1,12 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">🏥 SCDL</div>
+  <nav class="sidebar-nav">
+    <a routerLink="/dashboard"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">🏠 Inicio</a>
+    <a routerLink="/dashboard/pacientes" routerLinkActive="active">👥 Pacientes</a>
+    <a routerLink="/dashboard/medicos"   routerLinkActive="active">🩺 Médicos</a>
+    <a routerLink="/dashboard/citas"     routerLinkActive="active">📅 Citas</a>
+    <a routerLink="/dashboard/sedes"     routerLinkActive="active">🏥 Sedes</a>
+    <a routerLink="/dashboard/eps"       routerLinkActive="active">🏢 EPS</a>
+    <a routerLink="/dashboard/usuarios"  routerLinkActive="active" *ngIf="auth.isAdmin()">👤 Usuarios</a>
+  </nav>
+</aside>

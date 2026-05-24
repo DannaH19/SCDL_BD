@@ -2,29 +2,30 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../../config/database';
 
 export interface ConsultorioAttributes {
-  id_consultorio: number;
-  id_sede: number;
-  numero_consultorio: string;
-  piso?: number;
-  descripcion?: string;
-  disponible: boolean;
+  ID_consultorio: number;
+  Num_con?:       string;
+  Piso?:          number;
+  Bloque?:        string;
+  Estado_c?:      boolean;
+  ID_sede?:       number;
 }
-type ConsultorioCreation = Optional<ConsultorioAttributes, 'id_consultorio' | 'disponible'>;
+
+type ConsultorioCreation = Optional<ConsultorioAttributes, 'ID_consultorio'>;
 
 export class Consultorio extends Model<ConsultorioAttributes, ConsultorioCreation> implements ConsultorioAttributes {
-  public id_consultorio!: number;
-  public id_sede!: number;
-  public numero_consultorio!: string;
-  public piso?: number;
-  public descripcion?: string;
-  public disponible!: boolean;
+  public ID_consultorio!: number;
+  public Num_con?:        string;
+  public Piso?:           number;
+  public Bloque?:         string;
+  public Estado_c?:       boolean;
+  public ID_sede?:        number;
 }
 
 Consultorio.init({
-  id_consultorio:     { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  id_sede:            { type: DataTypes.INTEGER, allowNull: false },
-  numero_consultorio: { type: DataTypes.STRING(10), allowNull: false },
-  piso:               { type: DataTypes.INTEGER },
-  descripcion:        { type: DataTypes.STRING(100) },
-  disponible:         { type: DataTypes.BOOLEAN, defaultValue: true },
-}, { sequelize, tableName: 'consultorios', modelName: 'Consultorio' });
+  ID_consultorio: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  Num_con:        { type: DataTypes.STRING(10) },
+  Piso:           { type: DataTypes.INTEGER },
+  Bloque:         { type: DataTypes.STRING(15) },
+  Estado_c:       { type: DataTypes.BOOLEAN, defaultValue: true },
+  ID_sede:        { type: DataTypes.INTEGER },
+}, { sequelize, tableName: 'consultorio', modelName: 'Consultorio', timestamps: false });

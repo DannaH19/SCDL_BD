@@ -1,0 +1,8 @@
+<nav class="navbar">
+  <span class="nav-title">🏥 SCDL — Sistema de Turnos Médicos</span>
+  <div class="nav-right">
+    <span class="nav-user">{{ user?.username }}</span>
+    <span class="badge" [ngClass]="'badge-' + getRoleName()">{{ getRoleName() }}</span>
+    <button class="btn btn-danger btn-sm" (click)="logout()">Cerrar sesión</button>
+  </div>
+</nav>
