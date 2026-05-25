@@ -1,0 +1,47 @@
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h2>📅 Citas</h2>
+    <button class="btn btn-primary" (click)="nuevo()">+ Nueva</button>
+  </div>
+
+  <div *ngIf="mostrarForm" class="card" style="background:#f9f9f9">
+    <h3>{{ editando ? 'Editar' : 'Nueva' }} Cita</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+      <div class="form-group"><label>Fecha</label><input [(ngModel)]="form.fecha_c" type="date" /></div>
+      <div class="form-group"><label>Hora</label><input [(ngModel)]="form.hora_c" type="time" /></div>
+      <div class="form-group"><label>Estado</label>
+        <select [(ngModel)]="form.estado_c">
+          <option>Agendada</option><option>Confirmada</option><option>Cancelada</option><option>Atendida</option><option>Inasistencia</option>
+        </select>
+      </div>
+      <div class="form-group"><label>ID Medico</label><input [(ngModel)]="form.ID_medico" type="number" /></div>
+      <div class="form-group"><label>ID Paciente</label><input [(ngModel)]="form.ID_paciente" type="number" /></div>
+      <div class="form-group"><label>ID Horario</label><input [(ngModel)]="form.ID_horario" type="number" /></div>
+      <div class="form-group" style="grid-column:span 2"><label>Motivo</label><input [(ngModel)]="form.Motivo_consulta" /></div>
+      <div class="form-group" style="grid-column:span 2"><label>Observaciones</label><input [(ngModel)]="form.observaciones" /></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <button class="btn btn-success" (click)="guardar()">Guardar</button>
+      <button class="btn btn-secondary" (click)="mostrarForm=false">Cancelar</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading">Cargando...</div>
+  <table *ngIf="!loading">
+    <thead><tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Estado</th><th>Paciente</th><th>Medico</th><th>Acciones</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let c of citas">
+        <td>{{ c.ID_cita }}</td>
+        <td>{{ c.fecha_c }}</td>
+        <td>{{ c.hora_c }}</td>
+        <td>{{ c.estado_c }}</td>
+        <td>{{ c.ID_paciente }}</td>
+        <td>{{ c.ID_medico }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="editar(c)" *ngIf="auth.canEdit()">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="cancelar(c.ID_cita)" style="margin-left:6px" *ngIf="auth.isAdmin()">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

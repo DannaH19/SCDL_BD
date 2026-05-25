@@ -1,0 +1,31 @@
+<h2 style="margin-bottom:24px">Bienvenido, {{ user?.username }} 👋</h2>
+<div class="stats-grid">
+  <div class="stat-card blue">
+    <div class="stat-icon">👥</div>
+    <div class="stat-info">
+      <span class="stat-number">{{ stats.pacientes }}</span>
+      <span class="stat-label">Pacientes</span>
+    </div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon">🩺</div>
+    <div class="stat-info">
+      <span class="stat-number">{{ stats.medicos }}</span>
+      <span class="stat-label">Médicos</span>
+    </div>
+  </div>
+  <div class="stat-card orange">
+    <div class="stat-icon">📅</div>
+    <div class="stat-info">
+      <span class="stat-number">{{ stats.citas }}</span>
+      <span class="stat-label">Citas</span>
+    </div>
+  </div>
+  <div class="stat-card purple">
+    <div class="stat-icon">🏥</div>
+    <div class="stat-info">
+      <span class="stat-number">{{ stats.sedes }}</span>
+      <span class="stat-label">Sedes</span>
+    </div>
+  </div>
+</div>

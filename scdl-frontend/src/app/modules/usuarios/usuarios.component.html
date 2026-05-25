@@ -1,0 +1,36 @@
+<div class="card">
+  <div style="margin-bottom:16px">
+    <h2>👤 Usuarios del Sistema</h2>
+  </div>
+  <div *ngIf="loading">Cargando...</div>
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Nombre</th>
+        <th>Rol</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ u.Id_Usuario }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.Nom_comp }}</td>
+        <td>
+          <span class="badge" [ngClass]="getRolClass(u.ID_rol)">
+            {{ getRolNombre(u.ID_rol) }}
+          </span>
+        </td>
+        <td>{{ u.estado_u ? '✅' : '❌' }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="desactivar(u.Id_Usuario)">
+            Desactivar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

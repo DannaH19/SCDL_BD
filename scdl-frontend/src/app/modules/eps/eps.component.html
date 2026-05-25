@@ -1,0 +1,93 @@
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h2>🏢 EPS</h2>
+    <button class="btn btn-primary" (click)="nuevo()">+ Nueva</button>
+  </div>
+
+  <div *ngIf="mostrarForm" class="card" style="background:#f9f9f9">
+    <h3>{{ editando ? 'Editar' : 'Nueva' }} EPS</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input [(ngModel)]="form.Nom_eps" />
+      </div>
+
+      <div class="form-group">
+        <label>NIT</label>
+        <input [(ngModel)]="form.NIT" />
+      </div>
+
+      <div class="form-group">
+        <label>Regimen</label>
+        <select [(ngModel)]="form.tip_regimen">
+          <option>Contributivo</option>
+          <option>Subsidiado</option>
+          <option>Especial</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Telefono</label>
+        <input [(ngModel)]="form.telefono_e" />
+      </div>
+
+      <div class="form-group">
+        <label>Correo</label>
+        <input [(ngModel)]="form.correo_e" type="email" />
+      </div>
+
+      <div class="form-group">
+        <label>Direccion</label>
+        <input [(ngModel)]="form.direccion_e" />
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <button class="btn btn-success" (click)="guardar()">Guardar</button>
+      <button class="btn btn-secondary" (click)="mostrarForm=false">Cancelar</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading">Cargando...</div>
+
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>NIT</th>
+        <th>Regimen</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let e of epsList">
+        <td>{{ e.ID_eps }}</td>
+        <td>{{ e.Nom_eps }}</td>
+        <td>{{ e.NIT }}</td>
+        <td>{{ e.tip_regimen }}</td>
+        <td>{{ e.telefono_e }}</td>
+
+        <td>
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="editar(e)"
+            *ngIf="auth.canEdit()">
+            Editar
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminar(e.ID_eps)"
+            style="margin-left:6px"
+            *ngIf="auth.isAdmin()">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
