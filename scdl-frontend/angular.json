@@ -63,16 +63,11 @@
           },
           "defaultConfiguration": "production"
         },
-<<<<<<< HEAD
-       "serve": {
+        "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "src/proxy.conf.json"
           },
-=======
-        "serve": {
-          "builder": "@angular/build:dev-server",
->>>>>>> b7481c0deaf9e9ec79c88b181cc371d556fb4288
           "configurations": {
             "production": {
               "buildTarget": "scdl-frontend:build:production"
@@ -89,8 +84,4 @@
       }
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b7481c0deaf9e9ec79c88b181cc371d556fb4288

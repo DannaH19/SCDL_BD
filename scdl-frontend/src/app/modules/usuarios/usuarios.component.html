@@ -2,7 +2,6 @@
   <div style="margin-bottom:16px">
     <h2>👤 Usuarios del Sistema</h2>
   </div>
-<<<<<<< HEAD
   <div *ngIf="loading">Cargando...</div>
   <table *ngIf="!loading">
     <thead>
@@ -30,23 +29,6 @@
           <button class="btn btn-danger btn-sm" (click)="desactivar(u.Id_Usuario)">
             Desactivar
           </button>
-=======
-
-  <div *ngIf="loading">Cargando...</div>
-  <table *ngIf="!loading">
-    <thead>
-      <tr><th>ID</th><th>Username</th><th>Rol</th><th>Activo</th><th>Último acceso</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let u of usuarios">
-        <td>{{ u.id_usuario }}</td>
-        <td>{{ u.username }}</td>
-        <td><span class="badge" [ngClass]="getRolClass(u.id_rol)">{{ getRolNombre(u.id_rol) }}</span></td>
-        <td>{{ u.activo ? '✅' : '❌' }}</td>
-        <td>{{ u.ultimo_acceso | date:'short' }}</td>
-        <td>
-          <button class="btn btn-danger btn-sm" (click)="desactivar(u.id_usuario)" [disabled]="!u.activo">Desactivar</button>
->>>>>>> b7481c0deaf9e9ec79c88b181cc371d556fb4288
         </td>
       </tr>
     </tbody>
