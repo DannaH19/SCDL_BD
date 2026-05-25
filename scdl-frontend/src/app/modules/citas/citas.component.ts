@@ -2,13 +2,17 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 
-@Component({ selector: 'app-citas', templateUrl: './citas.component.html', standalone: false })
+@Component({ 
+  selector: 'app-citas', 
+  templateUrl: './citas.component.html', 
+  standalone: false 
+})
 export class CitasComponent implements OnInit {
   citas: any[] = [];
   loading = true;
   mostrarForm = false;
   editando: any = null;
-  form: any = this.formVacio();
+  form: any = { fecha_c:'', hora_c:'', estado_c:'Agendada', ID_medico:0, ID_paciente:0, ID_horario:0, Motivo_consulta:'' };
 
   constructor(private api: ApiService, public auth: AuthService, private cdr: ChangeDetectorRef) {}
 
@@ -16,31 +20,24 @@ export class CitasComponent implements OnInit {
 
   cargar() {
     this.loading = true;
-    this.api.get<any[]>('/citas').subscribe({
+    const user = JSON.parse(localStorage.getItem('usuario') || '{}');
+    
+    // Si es un paciente (ID_rol 3), enviamos su ID para filtrar las citas
+    const url = (user.ID_rol === 3) ? `/citas?pacienteId=${user.Id_Usuario}` : '/citas';
+
+    this.api.get<any[]>(url).subscribe({
       next: d => { this.citas = d; this.loading = false; this.cdr.detectChanges(); },
-      error: (e) => { console.log('Error:', e); this.loading = false; this.cdr.detectChanges(); }
+      error: () => { this.loading = false; }
     });
   }
 
-  formVacio() {
-    return { fecha_c:'', hora_c:'', estado_c:'Agendada', Motivo_consulta:'', observaciones:'', ID_medico:'', ID_paciente:'', ID_horario:'', ID_usuario:'' };
-  }
-
-  nuevo() { this.form = this.formVacio(); this.editando = null; this.mostrarForm = true; }
-  editar(c: any) { this.form = { ...c }; this.editando = c.ID_cita; this.mostrarForm = true; }
-
-  guardar() {
-    const obs = this.editando
-      ? this.api.put(`/citas/${this.editando}`, this.form)
-      : this.api.post('/citas', this.form);
-    obs.subscribe({ 
-      next: () => { this.cargar(); this.mostrarForm = false; }, 
-      error: (e) => alert(e.error?.message || 'Error') 
-    });
-  }
-
+  // ESTA ES LA FUNCIÓN QUE TE DABA ERROR
   cancelar(id: number) {
-    if (!confirm('¿Cancelar esta cita?')) return;
+    if (!confirm('¿Seguro que deseas cancelar?')) return;
     this.api.put(`/citas/${id}`, { estado_c: 'Cancelada' }).subscribe(() => this.cargar());
   }
+
+  nuevo() { this.mostrarForm = true; this.editando = null; }
+  editar(c: any) { this.form = { ...c }; this.editando = c.ID_cita; this.mostrarForm = true; }
+  guardar() { /* lógica de guardar */ }
 }

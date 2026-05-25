@@ -1,117 +1,95 @@
-<div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h2>👥 Pacientes</h2>
-    <button class="btn btn-primary" (click)="nuevo()">+ Nuevo</button>
+<div class="container-fluid py-4">
+  
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="text-primary fw-bold mb-0">
+      {{ auth.isUsuario() ? '📋 Mi Cuenta / Datos Personales' : '👥 Gestión General de Pacientes' }}
+    </h2>
   </div>
 
-  <div *ngIf="mostrarForm" class="card" style="background:#f9f9f9">
-    <h3>{{ editando ? 'Editar' : 'Nuevo' }} Paciente</h3>
+  <div *ngIf="auth.isUsuario() && pacientes.length > 0" class="row justify-content-center">
+    <div class="col-xl-10">
+      
+      <div class="card border-0 shadow-sm" style="background-color: #b0d4fa; border-radius: 8px;">
+        <div class="card-body p-4">
+          
+          <form (ngSubmit)="guardarPerfil(pacientes[0])">
+            <div class="row g-3">
+              
+              <div class="col-md-4">
+                <label class="form-label text-secondary fw-semibold mb-1">Código de Paciente</label>
+                <input type="text" [value]="pacientes[0].ID_Paciente" class="form-control bg-white text-dark" disabled>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label text-secondary fw-semibold mb-1">Nombre Completo</label>
+                <input type="text" [value]="pacientes[0].nom_p + ' ' + pacientes[0].ape_p" class="form-control bg-white text-dark" disabled>
+              </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
-      <div class="form-group">
-        <label>Documento</label>
-        <input [(ngModel)]="form.num_doc_p" />
+              <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                <div class="bg-white border rounded p-2 text-center" style="width: 80px; height: 80px;">
+                  <i class="bi bi-person-fill text-secondary" style="font-size: 3rem; line-height: 1;"></i>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <label class="form-label text-secondary fw-semibold mb-1">Teléfono Principal</label>
+                <input type="text" [(ngModel)]="pacientes[0].telefono_p" name="telefono" class="form-control bg-white text-dark">
+              </div>
+
+              <div class="col-md-5">
+                <label class="form-label text-secondary fw-semibold mb-1">Documento de Identidad (ID)</label>
+                <input type="text" [value]="pacientes[0].num_doc_p" class="form-control bg-white text-dark" disabled>
+              </div>
+
+              <div class="col-10">
+                <label class="form-label text-secondary fw-semibold mb-1">Dirección de Residencia</label>
+                <input type="text" [(ngModel)]="pacientes[0].direc_p" name="direccion" class="form-control bg-white text-dark">
+              </div>
+
+              <div class="col-md-5">
+                <label class="form-label text-secondary fw-semibold mb-1">Entidad de Salud / EPS</label>
+                <input type="text" [value]="pacientes[0].ID_eps || 'Particular'" class="form-control bg-white text-dark" disabled>
+              </div>
+
+              <div class="col-md-5">
+                <label class="form-label text-secondary fw-semibold mb-1">Fecha de Nacimiento / Cumpleaños</label>
+                <input type="text" [value]="pacientes[0].fecha_nac_p | date:'dd/MM/yyyy'" class="form-control bg-white text-dark" disabled>
+              </div>
+
+              <div class="col-md-10">
+                <label class="form-label text-secondary fw-semibold mb-1">💡 Correo electrónico</label>
+                <input type="email" [(ngModel)]="pacientes[0].correo_p" name="correo" class="form-control bg-white text-dark">
+              </div>
+
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-10 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm">
+                  💾 Guardar Cambios de Cuenta
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Tipo doc</label>
-        <select [(ngModel)]="form.ID_tipo_doc">
-          <option [value]="1">CC</option>
-          <option [value]="2">TI</option>
-          <option [value]="3">CE</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Nombre</label>
-        <input [(ngModel)]="form.nom_p" />
-      </div>
-
-      <div class="form-group">
-        <label>Apellido</label>
-        <input [(ngModel)]="form.ape_p" />
-      </div>
-
-      <div class="form-group">
-        <label>Fecha nacimiento</label>
-        <input [(ngModel)]="form.fecha_nac_p" type="date" />
-      </div>
-
-      <div class="form-group">
-        <label>Genero</label>
-        <select [(ngModel)]="form.ID_genero">
-          <option [value]="1">Femenino</option>
-          <option [value]="2">Masculino</option>
-          <option [value]="3">Prefiere no decirlo</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Telefono</label>
-        <input [(ngModel)]="form.telefono_p" />
-      </div>
-
-      <div class="form-group">
-        <label>Correo</label>
-        <input [(ngModel)]="form.correo_p" type="email" />
-      </div>
-
-      <div class="form-group">
-        <label>Direccion</label>
-        <input [(ngModel)]="form.direc_p" />
-      </div>
-
-      <div class="form-group">
-        <label>ID EPS</label>
-        <input [(ngModel)]="form.ID_eps" type="number" />
-      </div>
-    </div>
-
-    <div style="margin-top:16px;display:flex;gap:8px">
-      <button class="btn btn-success" (click)="guardar()">Guardar</button>
-      <button class="btn btn-secondary" (click)="mostrarForm=false">Cancelar</button>
     </div>
   </div>
 
-  <div *ngIf="loading">Cargando...</div>
+  <div *ngIf="!auth.isUsuario()">
+    <div class="d-flex justify-content-end mb-3">
+      <button class="btn btn-primary" (click)="nuevo()">+ Nuevo</button>
+    </div>
+    
+    <div class="card shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          </table>
+      </div>
+    </div>
+  </div>
 
-  <table *ngIf="!loading">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Documento</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Telefono</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let p of pacientes">
-        <td>{{ p.ID_Paciente }}</td>
-        <td>{{ p.num_doc_p }}</td>
-        <td>{{ p.nom_p }}</td>
-        <td>{{ p.ape_p }}</td>
-        <td>{{ p.telefono_p }}</td>
-
-        <td>
-          <button
-            class="btn btn-warning btn-sm"
-            (click)="editar(p)"
-            *ngIf="auth.canEdit()">
-            Editar
-          </button>
-
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="eliminar(p.ID_Paciente)"
-            style="margin-left:6px"
-            *ngIf="auth.isAdmin()">
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

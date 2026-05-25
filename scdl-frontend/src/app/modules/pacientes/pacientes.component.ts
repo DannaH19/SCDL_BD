@@ -2,7 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 
-@Component({ selector: 'app-pacientes', templateUrl: './pacientes.component.html', standalone: false })
+@Component({ 
+  selector: 'app-pacientes', 
+  templateUrl: './pacientes.component.html', 
+  standalone: false 
+})
 export class PacientesComponent implements OnInit {
   pacientes: any[] = [];
   loading = true;
@@ -10,16 +14,58 @@ export class PacientesComponent implements OnInit {
   editando: any = null;
   form: any = this.formVacio();
 
+  // Variable exclusiva para manejar el perfil del usuario activo en "Mi Cuenta"
+  perfilUsuarioActual: any = null;
+
   constructor(private api: ApiService, public auth: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() { this.cargar(); }
 
   cargar() {
     this.loading = true;
-    this.api.get<any[]>('/pacientes').subscribe({
-      next: d => { this.pacientes = d; this.loading = false; this.cdr.detectChanges(); },
-      error: (e) => { this.loading = false; this.cdr.detectChanges(); }
-    });
+    const usuarioLogueado = this.auth.getUser();
+
+    // 🚀 CASO 1: Si es un Paciente (Rol Usuario = 3), buscamos estrictamente su perfil por Correo
+    if (this.auth.isUsuario() && usuarioLogueado) {
+      const correoUsuario = usuarioLogueado.correo_u; // Tomamos 'sara@test.com' directamente
+
+      this.api.get<any[]>(`/pacientes?correo=${correoUsuario}`).subscribe({
+        next: d => {
+          this.pacientes = d;
+          
+          // 💡 Corrección del Error TS2698: Casteamos el elemento a (any) antes del spread
+          if (Array.isArray(d) && d.length > 0) {
+            this.perfilUsuarioActual = d[0];
+            this.form = { ...(d[0] as any) }; 
+          } else if (d && !Array.isArray(d)) {
+            this.perfilUsuarioActual = d;
+            this.form = { ...(d as any) };
+          }
+          
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (e) => {
+          console.error('Error cargando perfil del paciente:', e);
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+
+    } else {
+      // 🚀 CASO 2: Si es Administrador / Superadmin, cargamos todos los pacientes normalmente
+      this.api.get<any[]>('/pacientes').subscribe({
+        next: d => {
+          this.pacientes = d;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (e) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+    }
   }
 
   formVacio() {
@@ -37,6 +83,30 @@ export class PacientesComponent implements OnInit {
     obs.subscribe({ 
       next: () => { this.cargar(); this.mostrarForm = false; }, 
       error: (e) => alert(e.error?.message || 'Error') 
+    });
+  }
+
+  // 👇 ACTUALIZACIÓN TOTALMENTE DINÁMICA DE MI CUENTA
+  guardarPerfil(pacienteModificado: any) {
+    const target = pacienteModificado || this.perfilUsuarioActual;
+    if (!target || !target.ID_Paciente) {
+      alert('No se pudo identificar el código del paciente a actualizar.');
+      return;
+    }
+
+    const datosActualizados = {
+      ...target,
+      telefono_p: target.telefono_p,
+      correo_p: target.correo_p,
+      direc_p: target.direc_p
+    };
+
+    this.api.put(`/pacientes/${target.ID_Paciente}`, datosActualizados).subscribe({
+      next: () => {
+        alert('¡Tus datos de cuenta se han actualizado correctamente!');
+        this.cargar(); // Recarga los datos limpios de la base de datos
+      },
+      error: (e) => alert(e.error?.message || 'Error al intentar actualizar el perfil')
     });
   }
 

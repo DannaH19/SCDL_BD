@@ -1,4 +1,4 @@
-<div class="login-wrapper">
+<div *ngIf="!mostrarSeleccionPerfil" class="login-wrapper">
   <div class="login-card">
     <div class="login-logo">
       <span>🏥</span>
@@ -20,7 +20,6 @@
       </button>
     </form>
 
-    <!-- ↓ REGISTRO VA AQUÍ ↓ -->
     <p style="text-align:center;margin-top:16px;font-size:13px;color:#888">
       ¿No tienes cuenta?
       <a href="#" (click)="mostrarRegistro=true;$event.preventDefault()" style="color:#1976d2">Regístrate</a>
@@ -64,7 +63,103 @@
         <button class="btn btn-secondary" (click)="mostrarRegistro=false">Cancelar</button>
       </div>
     </div>
-    <!-- ↑ FIN REGISTRO ↑ -->
+    </div>
+</div>
+
+<div *ngIf="mostrarSeleccionPerfil" class="perfil-container">
+  <div class="perfil-card">
+    
+    <div class="perfil-header">
+      <h2>📋 Completar Información de Perfil</h2>
+      <p class="subtitle">Detectamos que es tu primer ingreso. Por favor selecciona tu rol e ingresa tus datos físicos para habilitar tu cuenta en la base de datos.</p>
+    </div>
+
+    <div class="role-selector">
+      <button type="button" class="btn-role" [class.active]="perfilSeleccionado === 'paciente'" (click)="seleccionarPerfil('paciente')">
+        🙋‍♂️ Registrarme como Paciente
+      </button>
+      <button type="button" class="btn-role" [class.active]="perfilSeleccionado === 'medico'" (click)="seleccionarPerfil('medico')">
+        🩺 Registrarme como Médico
+      </button>
+    </div>
+
+    <div *ngIf="perfilSeleccionado === 'paciente'" class="form-body animate-fade">
+      <h3 class="form-title">Datos Personales del Paciente</h3>
+      
+      <div class="grid-form">
+        <div class="form-group-profile">
+          <label>Documento de Identidad *</label>
+          <input type="text" [(ngModel)]="perfilPacienteForm.num_doc_p" placeholder="Ej: 10203040" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Nombres *</label>
+          <input type="text" [(ngModel)]="perfilPacienteForm.nom_p" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Apellidos *</label>
+          <input type="text" [(ngModel)]="perfilPacienteForm.ape_p" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Fecha de Nacimiento</label>
+          <input type="date" [(ngModel)]="perfilPacienteForm.fecha_nac_p" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Teléfono Principal</label>
+          <input type="text" [(ngModel)]="perfilPacienteForm.telefono_p" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Correo Electrónico</label>
+          <input type="email" [(ngModel)]="perfilPacienteForm.correo_p" class="input-profile" />
+        </div>
+        <div class="form-group-profile full-width">
+          <label>Dirección de Residencia</label>
+          <input type="text" [(ngModel)]="perfilPacienteForm.direc_p" class="input-profile" />
+        </div>
+      </div>
+
+      <button class="btn btn-success btn-block btn-save" (click)="guardarPerfilPaciente()" [disabled]="loading">
+        {{ loading ? 'Guardando Registro...' : '💾 Guardar Datos y Entrar al Sistema' }}
+      </button>
+    </div>
+
+    <div *ngIf="perfilSeleccionado === 'medico'" class="form-body animate-fade">
+      <h3 class="form-title">Datos Profesionales del Médico</h3>
+      
+      <div class="grid-form">
+        <div class="form-group-profile">
+          <label>Documento de Identidad *</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.num_doc_m" placeholder="Ej: 9876543" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Nombres *</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.nom_m" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Apellidos *</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.ape_m" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Número de Licencia Médica *</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.num_lic" placeholder="Ej: MLC-12345" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Teléfono de Contacto</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.telefono_m" class="input-profile" />
+        </div>
+        <div class="form-group-profile">
+          <label>Correo Institucional</label>
+          <input type="email" [(ngModel)]="perfilMedicoForm.correo_m" class="input-profile" />
+        </div>
+        <div class="form-group-profile full-width">
+          <label>Dirección del Consultorio</label>
+          <input type="text" [(ngModel)]="perfilMedicoForm.direc_m" class="input-profile" />
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-save" (click)="guardarPerfilMedico()" [disabled]="loading">
+        {{ loading ? 'Guardando Registro...' : '💾 Guardar Datos y Entrar al Sistema' }}
+      </button>
+    </div>
 
   </div>
 </div>

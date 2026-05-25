@@ -3,16 +3,20 @@
   <nav class="sidebar-nav">
     <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">🏠 Inicio</a>
 
-    <!-- Usuario y superiores -->
-    <a routerLink="/dashboard/pacientes" routerLinkActive="active" *ngIf="auth.canView()">👥 Pacientes</a>
+    <ng-container *ngIf="auth.canView()">
+      <a routerLink="/dashboard/pacientes" routerLinkActive="active" *ngIf="auth.isUsuario(); else vAdmin">⚙️ Mi Cuenta</a>
+      
+      <ng-template #vAdmin>
+        <a routerLink="/dashboard/pacientes" routerLinkActive="active">👥 Pacientes</a>
+      </ng-template>
+    </ng-container>
+
     <a routerLink="/dashboard/citas"     routerLinkActive="active" *ngIf="auth.canView()">📅 Citas</a>
 
-    <!-- Administrador y superiores -->
     <a routerLink="/dashboard/medicos"   routerLinkActive="active" *ngIf="auth.isAdmin()">🩺 Médicos</a>
     <a routerLink="/dashboard/sedes"     routerLinkActive="active" *ngIf="auth.isAdmin()">🏥 Sedes</a>
     <a routerLink="/dashboard/eps"       routerLinkActive="active" *ngIf="auth.isAdmin()">🏢 EPS</a>
 
-    <!-- Solo Superadmin -->
     <a routerLink="/dashboard/usuarios"  routerLinkActive="active" *ngIf="auth.isSuperadmin()">👤 Usuarios</a>
   </nav>
 </aside>

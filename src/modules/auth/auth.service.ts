@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { Op } from 'sequelize';
+import { Paciente } from '../pacientes/pacientes_model'; 
+import { Medico } from '../medicos/medicos_model';
 import { ENV } from '../../config/env';
 import { AuthRepository } from './auth.repository';
 import { LoginDto } from './auth.schema';
@@ -19,6 +22,24 @@ export class AuthService {
 
     await repo.updateUltimoAcceso(usuario.Id_Usuario);
 
+    
+    let requierePerfil = false;
+    const primeraPalabraNombre = usuario.Nom_comp.split(' ')[0] || '';
+
+    if (usuario.ID_rol === 3) {
+      
+      const paciente = await Paciente.findOne({
+        where: { nom_p: { [Op.like]: `%${primeraPalabraNombre}%` } }
+      });
+      if (!paciente) requierePerfil = true;
+    } 
+    else if (usuario.ID_rol === 2) {
+      const medico = await Medico.findOne({
+        where: { nom_m: { [Op.like]: `%${primeraPalabraNombre}%` } }
+      });
+      if (!medico) requierePerfil = true;
+    }
+
     const token = jwt.sign(
       {
         id:       usuario.Id_Usuario,
@@ -29,8 +50,9 @@ export class AuthService {
     );
 
     return {
-      message: 'Login exitoso',
+      message: 'Login procesado',
       token,
+      requierePerfil, 
       usuario: {
         id:       usuario.Id_Usuario,
         username: usuario.username,
@@ -39,6 +61,7 @@ export class AuthService {
       },
     };
   }
+
 
   async register(data: any) {
     const existe = await repo.findByUsername(data.username);

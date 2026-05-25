@@ -7,7 +7,18 @@ export class PacienteService {
   getAll() {
     return repo.findAll();
   }
+  async getByCorreo(correo: string) {
+    // 🟢 Llamamos de forma limpia al nuevo método estructurado en el repositorio
+    return await repo.findByCorreo(correo);
+  }
+  async getByUsuario(nombreCompleto: string) {
+    return await repo.findByNombreCompleto(nombreCompleto);
+  }
 
+  async getByDocumento(documento: string) {
+    return await repo.findByDocumento(documento);
+  }
+  
   async getById(id: number) {
     const paciente = await repo.findById(id);
     if (!paciente) throw new Error(`Paciente con id ${id} no encontrado.`);
@@ -15,8 +26,11 @@ export class PacienteService {
   }
 
   async create(data: CreatePacienteDto) {
+    // Como findByDocumento usa findAll, nos devuelve una lista. Validamos si no está vacía.
     const existe = await repo.findByDocumento(data.num_doc_p);
-    if (existe) throw new Error(`Ya existe un paciente con documento ${data.num_doc_p}.`);
+    if (existe && existe.length > 0) {
+      throw new Error(`Ya existe un paciente con documento ${data.num_doc_p}.`);
+    }
     return repo.create(data);
   }
 

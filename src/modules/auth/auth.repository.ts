@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize'; 
 import Usuario from './auth.model';
 
 export class AuthRepository {
@@ -9,7 +10,7 @@ export class AuthRepository {
 
   updateUltimoAcceso(id: number) {
     return Usuario.update(
-      { ulti_acceso: new Date() },
+      { ulti_acceso: Sequelize.literal('NOW()') },
       { where: { Id_Usuario: id } }
     );
   }
