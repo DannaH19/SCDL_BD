@@ -15,8 +15,13 @@ export class EpsService {
   }
 
   async create(data: CreateEpsDto) {
+<<<<<<< HEAD
     const existe = await repo.findByNit(data.NIT);
     if (existe) throw new Error(`Ya existe una EPS con NIT ${data.NIT}.`);
+=======
+    const existe = await repo.findByNit(data.nit);
+    if (existe) throw new Error(`Ya existe una EPS con NIT ${data.nit}.`);
+>>>>>>> b7481c0deaf9e9ec79c88b181cc371d556fb4288
     return repo.create(data);
   }
 
