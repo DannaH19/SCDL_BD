@@ -23,16 +23,23 @@ export class MedicosComponent implements OnInit {
   }
 
   formVacio() {
-    return { num_doc_m:'', nom_m:'', ape_m:'', num_lic:'', telefono_m:'', correo_m:'', direc_m:'', ID_tipo_doc:1, ID_genero:1, ID_especialidad:'', ID_ciudad:'' };
+    return { num_doc_m:'', nom_m:'', ape_m:'', num_lic:'', telefono_m:'', correo_m:'', direc_m:'', ID_tipo_doc:1, ID_genero:1, ID_especialidad:null, ID_ciudad:null };
   }
 
   nuevo() { this.form = this.formVacio(); this.editando = null; this.mostrarForm = true; }
   editar(m: any) { this.form = { ...m }; this.editando = m.ID_medico; this.mostrarForm = true; }
 
   guardar() {
+    const payload = {
+      ...this.form,
+      ID_tipo_doc:     this.form.ID_tipo_doc     ? Number(this.form.ID_tipo_doc)     : undefined,
+      ID_genero:       this.form.ID_genero       ? Number(this.form.ID_genero)       : undefined,
+      ID_especialidad: this.form.ID_especialidad ? Number(this.form.ID_especialidad) : undefined,
+      ID_ciudad:       this.form.ID_ciudad       ? Number(this.form.ID_ciudad)       : undefined,
+    };
     const obs = this.editando
-      ? this.api.put(`/medicos/${this.editando}`, this.form)
-      : this.api.post('/medicos', this.form);
+      ? this.api.put(`/medicos/${this.editando}`, payload)
+      : this.api.post('/medicos', payload);
     obs.subscribe({ 
       next: () => { this.cargar(); this.mostrarForm = false; }, 
       error: (e) => alert(e.error?.message || 'Error') 
